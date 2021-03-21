@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+
+  db:
+    image: postgres:12-alpine
+    environment:
+      POSTGRES_USER: sec
+      POSTGRES_PASSWORD: sec
+      POSTGRES_DB: sec
+    ports:
+      - 5432:5432
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:12.0.4
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_IMPORT: /tmp/lab-realm.json
+    ports:
+      - 8080:8080
+      - 8443:8443
+      - 8180:8180
+    volumes:
+      - ./realm.json:/tmp/lab-realm.json
