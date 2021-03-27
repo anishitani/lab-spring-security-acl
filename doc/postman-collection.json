@@ -1,0 +1,183 @@
+{
+	"info": {
+		"_postman_id": "5697afdf-d0ac-4b4a-a390-f02f4e5d4b4f",
+		"name": "lab-spring-security-acl",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "well-known oidc",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{kc-url}}/auth/realms/{{realm}}/.well-known/openid-configuration",
+					"protocol": "http",
+					"host": [
+						"{{kc-url}}"
+					],
+					"path": [
+						"auth",
+						"realms",
+						"{{realm}}",
+						".well-known",
+						"openid-configuration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "authenticate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if(pm.response.code<300){\r",
+							"    var resp = JSON.parse(responseBody);\r",
+							"    postman.setEnvironmentVariable(\"access_token\", resp[\"access_token\"]);\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "usera",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "usera",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "lab-client",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "f80b72c5-7dd0-4c7a-9a27-77310f2b728f",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{kc-url}}/auth/realms/{{realm}}/protocol/openid-connect/token",
+					"protocol": "http",
+					"host": [
+						"{{kc-url}}"
+					],
+					"path": [
+						"auth",
+						"realms",
+						"{{realm}}",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get post",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{blog-url}}/posts/:postId",
+					"protocol": "http",
+					"host": [
+						"{{blog-url}}"
+					],
+					"path": [
+						"posts",
+						":postId"
+					],
+					"variable": [
+						{
+							"key": "postId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create post",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"how to protect your resources\",\r\n    \"subject\": \"security\",\r\n    \"content\": \"lorem ipsum\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{blog-url}}/writers/:writerid/posts",
+					"protocol": "http",
+					"host": [
+						"{{blog-url}}"
+					],
+					"path": [
+						"writers",
+						":writerid",
+						"posts"
+					],
+					"variable": [
+						{
+							"key": "writerid",
+							"value": "{{user_a_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "introspect",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/auth/realms/lab/protocol/openid-connect/token/introspect",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"realms",
+						"lab",
+						"protocol",
+						"openid-connect",
+						"token",
+						"introspect"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

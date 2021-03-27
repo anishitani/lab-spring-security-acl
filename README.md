@@ -17,3 +17,9 @@ Given a simple setup we'll try the following:
 1. Protect resources from non owners
 1. Avoid resource creation on other user behalf
 1. Allow common resource to be accessible by all users
+
+## Support Tools
+
+### Postman
+
+This [collection](doc/postman-collection.json) contains a few requests used in this project. I hope it helps when testing! :wink:

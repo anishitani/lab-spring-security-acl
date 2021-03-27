@@ -2,7 +2,16 @@ server:
   port: 8090
 
 spring:
+
   datasource:
     url: jdbc:postgresql://${DB_URL:localhost}:5432/sec
     username: sec
     password: sec
+
+  security:
+    oauth2:
+      resourceserver:
+        opaque:
+          introspection-uri: http://${IDP_URI:localhost}:${IDP_PORT:8080}/auth/realms/lab/protocol/openid-connect/token/introspect
+          introspection-client-id: ${IDP_CLIENT_ID:lab-client}
+          introspection-client-secret: ${ID_CLIENT_SECRET:f80b72c5-7dd0-4c7a-9a27-77310f2b728f}
