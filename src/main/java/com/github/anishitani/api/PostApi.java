@@ -4,6 +4,7 @@ import com.github.anishitani.api.dto.PostDTO;
 import com.github.anishitani.domain.PostService;
 import com.github.anishitani.domain.model.Post;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +24,7 @@ public class PostApi {
         this.postService = postService;
     }
 
+    @PreAuthorize("@resourceAccessEvaluator.isSubject(principal.attributes.get('sub'),#writerId)")
     @PostMapping("writers/{writerId}/posts")
     public ResponseEntity<Void> createPost(@PathVariable("writerId") UUID writerId,
                                            @RequestBody PostDTO post) {
@@ -30,6 +32,7 @@ public class PostApi {
         return ResponseEntity.created(getLocation(created.getId())).build();
     }
 
+    @PreAuthorize("@resourceAccessEvaluator.ownsPosts(principal.attributes.get('sub'),#postId)")
     @GetMapping("/posts/{postId}")
     public ResponseEntity<PostDTO> fetchPost(@PathVariable("postId") Integer postId) {
         PostDTO fetched = new PostDTO();

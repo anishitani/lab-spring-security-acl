@@ -1,7 +1,9 @@
 package com.github.anishitani.infra.configuration;
 
 import com.github.anishitani.domain.PostService;
+import com.github.anishitani.domain.ResourceAccessEvaluator;
 import com.github.anishitani.domain.impl.PostServiceImpl;
+import com.github.anishitani.domain.impl.ResourceAccessEvaluatorImpl;
 import com.github.anishitani.domain.repository.PostRepository;
 import com.github.anishitani.infra.repository.PostRepositoryImpl;
 import org.springframework.context.annotation.Bean;
@@ -19,5 +21,10 @@ public class BeanConfiguration {
     @Bean
     PostRepository postRepository(DataSource ds) {
         return new PostRepositoryImpl(ds);
+    }
+
+    @Bean
+    ResourceAccessEvaluator resourceAccessEvaluator(PostRepository postRepository) {
+        return new ResourceAccessEvaluatorImpl(postRepository);
     }
 }

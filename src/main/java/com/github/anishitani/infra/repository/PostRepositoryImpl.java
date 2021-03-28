@@ -13,6 +13,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.sql.DataSource;
+import java.util.Map;
 import java.util.UUID;
 
 public class PostRepositoryImpl implements PostRepository {
@@ -61,6 +62,22 @@ public class PostRepositoryImpl implements PostRepository {
         } catch (Exception ex) {
             logger.error("Failed fetching post", ex);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong :(");
+        }
+    }
+
+    @Override
+    public boolean isOwner(Integer id, UUID subjectId) {
+        try {
+            MapSqlParameterSource params = new MapSqlParameterSource();
+            params.addValue("id", id);
+            params.addValue("subjectId", subjectId);
+            return jdbc.queryForObject(
+                    " SELECT exists(SELECT FROM posts WHERE id = :id AND  writer_id = :subjectId ) ",
+                    params, Boolean.class
+            );
+        } catch (Exception ex) {
+            logger.error("Failed to process check", ex);
+            return false;
         }
     }
 }
